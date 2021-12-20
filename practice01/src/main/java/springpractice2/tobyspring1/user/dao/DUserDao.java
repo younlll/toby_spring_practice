@@ -1,12 +1,17 @@
 package springpractice2.tobyspring1.user.dao;
 
-import spring.user.domain.User;
-import spring.user.domain.UserDao;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import springpractice2.tobyspring1.user.domain.User;
+import springpractice2.tobyspring1.user.domain.UserDao;
 
 import java.sql.SQLException;
 
 public class DUserDao {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        ApplicationContext context =
+                new AnnotationConfigApplicationContext(DaoFactory.class);
+        UserDao dao = context.getBean("userDao", UserDao.class);
 
         User user = new User();
         user.setId("2001");
