@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import springpractice2.tobyspring1.user.domain.UserDao;
 
 @Configuration
-public class DaoFactory {
+public class CountingDaoFactory {
     @Bean
     public UserDao userDao() {
         return new UserDao(connectionMaker());
@@ -13,6 +13,12 @@ public class DaoFactory {
 
     @Bean
     public ConnectionMaker connectionMaker() {
-        return new LocalDBConnectionMaker();
+        return new CountingConnectionMaker(realConnectionMaker());
     }
+
+    @Bean
+    public ConnectionMaker realConnectionMaker() {
+        return new DConnectionMaker();
+    }
+
 }
