@@ -1,5 +1,6 @@
 package springpractice2.tobyspring1.user.domain;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import springpractice2.tobyspring1.user.dao.ConnectionMaker;
 import springpractice2.tobyspring1.user.dao.DaoFactory;
 
