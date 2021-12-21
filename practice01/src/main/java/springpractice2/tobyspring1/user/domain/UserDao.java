@@ -5,24 +5,18 @@ import springpractice2.tobyspring1.user.dao.ConnectionMaker;
 import java.sql.*;
 
 public class UserDao {
-    private static UserDao INSTANCE;
     private ConnectionMaker connectionMaker;
+    private Connection conn;
+    private User user;
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
     }
 
-    public static synchronized UserDao getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new UserDao(getInstance().connectionMaker);
-        }
-        return INSTANCE;
-    }
-
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+        this.conn = connectionMaker.makeConnection();
 
-        PreparedStatement ps = c.prepareStatement(
+        PreparedStatement ps = conn.prepareStatement(
                 "insert into users(id, name, password) values (?, ?, ?)");
         ps.setString(1, user.getId());
         ps.setString(2, user.getName());
@@ -31,27 +25,27 @@ public class UserDao {
         ps.executeUpdate();
 
         ps.close();
-        c.close();
+        conn.close();
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+        this.conn = connectionMaker.makeConnection();
 
-        PreparedStatement ps = c.prepareStatement(
+        PreparedStatement ps = conn.prepareStatement(
                 "select * from users where id = ?");
         ps.setString(1, id);
 
         ResultSet rs = ps.executeQuery();
         rs.next();
-        User user = new User();
-        user.setId(rs.getString("id"));
-        user.setName(rs.getString("name"));
-        user.setPassword(rs.getString("password"));
+        this.user = new User();
+        this.user.setId(rs.getString("id"));
+        this.user.setName(rs.getString("name"));
+        this.user.setPassword(rs.getString("password"));
 
         rs.close();
         ps.close();
-        c.close();
+        this.conn.close();
 
-        return user;
+        return this.user;
     }
 }
