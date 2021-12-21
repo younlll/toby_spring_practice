@@ -8,7 +8,7 @@ import springpractice2.tobyspring1.user.domain.UserDao;
 public class DaoFactory {
     @Bean
     public UserDao userDao() {
-        return new UserDao(connectionMaker());
+        return new UserDao();
     }
 
     @Bean

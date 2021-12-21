@@ -1,6 +1,7 @@
 package springpractice2.tobyspring1.user.domain;
 
 import springpractice2.tobyspring1.user.dao.ConnectionMaker;
+import springpractice2.tobyspring1.user.dao.DaoFactory;
 
 import java.sql.*;
 
@@ -9,8 +10,9 @@ public class UserDao {
     private Connection conn;
     private User user;
 
-    public UserDao(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public UserDao() {
+        DaoFactory daoFactory = new DaoFactory();
+        this.connectionMaker = daoFactory.connectionMaker();
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
