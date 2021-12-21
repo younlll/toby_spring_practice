@@ -5,10 +5,18 @@ import springpractice2.tobyspring1.user.dao.ConnectionMaker;
 import java.sql.*;
 
 public class UserDao {
+    private static UserDao INSTANCE;
     private ConnectionMaker connectionMaker;
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
+    }
+
+    public static synchronized UserDao getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new UserDao(getInstance().connectionMaker);
+        }
+        return INSTANCE;
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
