@@ -3,7 +3,6 @@ package springpractice2.tobyspring1.user.dao;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import springpractice2.tobyspring1.user.domain.User;
-import springpractice2.tobyspring1.user.domain.UserDao;
 
 import java.sql.SQLException;
 

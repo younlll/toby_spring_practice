@@ -2,7 +2,6 @@ package springpractice2.tobyspring1.user.dao;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springpractice2.tobyspring1.user.domain.UserDao;
 
 @Configuration
 public class DaoFactory {

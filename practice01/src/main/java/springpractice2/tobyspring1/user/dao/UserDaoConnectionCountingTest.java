@@ -1,7 +1,6 @@
 package springpractice2.tobyspring1.user.dao;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import springpractice2.tobyspring1.user.domain.UserDao;
 
 import java.sql.SQLException;
 
