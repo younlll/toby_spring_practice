@@ -12,6 +12,11 @@ public class DUserDao {
         ApplicationContext context =
                 new AnnotationConfigApplicationContext(DaoFactory.class);
         UserDao dao = context.getBean("userDao", UserDao.class);
+        UserDao dao2 = context.getBean("userDao", UserDao.class);
+
+        System.out.println(dao);
+        System.out.println(dao2);
+
 
         User user = new User();
         user.setId("2001");
@@ -25,6 +30,5 @@ public class DUserDao {
         System.out.println(user2.getName());
         System.out.println(user2.getPassword());
         System.out.println("D사 사용자 " + user2.getId() + " 조회성공!!!");
-
     }
 }
