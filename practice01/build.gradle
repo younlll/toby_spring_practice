@@ -18,8 +18,9 @@ dependencies {
 	// jdbc driver
 	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
-	testCompileOnly 'junit:junit:4.12'
-	testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.8.1'
+//	testCompileOnly 'junit:junit:5.12'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 
 	implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.2.0.RELEASE'
 }
