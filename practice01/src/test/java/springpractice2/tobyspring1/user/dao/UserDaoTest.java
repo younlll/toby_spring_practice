@@ -14,17 +14,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserDaoTest {
     private UserDao dao;
+    private User user1;
+    private User user2;
+    private User user3;
 
     @BeforeEach // @Test 메소드가 실행되기 전에 먼저 실행되어야 하는 메소드를 정의
     public void setUp() {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         this.dao = context.getBean("userDao", UserDao.class);
+
+        this.user1 = new User("1000", "youn", "pwisyoun");
+        this.user2 = new User("1001", "intellij", "pwisj");
+        this.user3 = new User("1002", "hotsix", "pwis6");
     }
 
     @Test   // JUnit에 테스트용 메소드임을 알린다
     public void addAndGet() throws SQLException, ClassNotFoundException {
-        User user1 = new User("1000", "youn", "pwisyoun");
-        User user2 = new User("1001", "intellij", "pwisj");
+//        User user1 = new User("1000", "youn", "pwisyoun");
+//        User user2 = new User("1001", "intellij", "pwisj");
 
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
@@ -45,9 +52,9 @@ public class UserDaoTest {
 
     @Test
     public void count() throws ClassNotFoundException, SQLException {
-        User user1 = new User("1000", "youn", "pwisyoun");
-        User user2 = new User("1001", "intellij", "pwisj");
-        User user3 = new User("1002", "hotsix", "pwis6");
+//        User user1 = new User("1000", "youn", "pwisyoun");
+//        User user2 = new User("1001", "intellij", "pwisj");
+//        User user3 = new User("1002", "hotsix", "pwis6");
 
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
