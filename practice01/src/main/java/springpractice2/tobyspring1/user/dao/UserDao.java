@@ -1,5 +1,6 @@
 package springpractice2.tobyspring1.user.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import springpractice2.tobyspring1.user.domain.User;
 
 import javax.sql.DataSource;
@@ -38,16 +39,22 @@ public class UserDao {
                 "select * from users where id = ?");
         ps.setString(1, id);
 
+        this.user = null;
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        this.user = new User();
-        this.user.setId(rs.getString("id"));
-        this.user.setName(rs.getString("name"));
-        this.user.setPassword(rs.getString("password"));
+        if(rs.next()) {
+            this.user = new User();
+            this.user.setId(rs.getString("id"));
+            this.user.setName(rs.getString("name"));
+            this.user.setPassword(rs.getString("password"));
+        }
 
         rs.close();
         ps.close();
         conn.close();
+
+        if (user == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
 
         return this.user;
     }
