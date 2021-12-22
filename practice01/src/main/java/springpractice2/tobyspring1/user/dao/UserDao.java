@@ -2,22 +2,22 @@ package springpractice2.tobyspring1.user.dao;
 
 import springpractice2.tobyspring1.user.domain.User;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao {
-    private ConnectionMaker connectionMaker;
-    private Connection conn;
+    private DataSource dataSource;
     private User user;
 
-    public void setConnectionMaker(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        this.conn = connectionMaker.makeConnection();
+        Connection conn = dataSource.getConnection();
 
         PreparedStatement ps = conn.prepareStatement(
                 "insert into users(id, name, password) values (?, ?, ?)");
@@ -32,7 +32,7 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        this.conn = connectionMaker.makeConnection();
+        Connection conn = dataSource.getConnection();
 
         PreparedStatement ps = conn.prepareStatement(
                 "select * from users where id = ?");
@@ -47,7 +47,7 @@ public class UserDao {
 
         rs.close();
         ps.close();
-        this.conn.close();
+        conn.close();
 
         return this.user;
     }
