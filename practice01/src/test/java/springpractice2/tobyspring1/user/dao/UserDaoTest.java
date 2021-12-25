@@ -19,12 +19,8 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = "/applicationContext.xml")
-@DirtiesContext
 public class UserDaoTest {
 
-    @Autowired
     private UserDao dao;
     private User user1;
     private User user2;
@@ -40,6 +36,7 @@ public class UserDaoTest {
         this.user2 = new User("1001", "intellij", "pwisj");
         this.user3 = new User("1002", "hotsix", "pwis6");
 
+        dao = new UserDao();
         DataSource dataSource = new SingleConnectionDataSource(
                 "jdbc:mysql://localhost:3306/spring_study_dev", "root", "root", true
                 );
