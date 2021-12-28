@@ -1,5 +1,6 @@
 package springpractice2.tobyspring1.user.dao;
 
+import com.sun.nio.sctp.SctpSocketOption;
 import org.springframework.dao.EmptyResultDataAccessException;
 import springpractice2.tobyspring1.user.domain.User;
 
@@ -60,13 +61,31 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        Connection conn = dataSource.getConnection();
+        Connection conn = null;
+        PreparedStatement ps = null;
 
-        PreparedStatement ps = conn.prepareStatement("delete from users");
-        ps.executeUpdate();
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement("delete from users");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
 
-        ps.close();
-        conn.close();
+                }
+            }
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+
+                }
+            }
+        }
     }
 
     public int getCount() throws SQLException {
