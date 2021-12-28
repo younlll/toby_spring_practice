@@ -2,17 +2,25 @@ package springpractice2.tobyspring1.user.dao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import springpractice2.tobyspring1.user.domain.User;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserDaoTest {
+
     private UserDao dao;
     private User user1;
     private User user2;
@@ -20,12 +28,19 @@ public class UserDaoTest {
 
     @BeforeEach // @Test 메소드가 실행되기 전에 먼저 실행되어야 하는 메소드를 정의
     public void setUp() {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        this.dao = context.getBean("userDao", UserDao.class);
+
+//        System.out.println("context : " + this.context);
+//        System.out.println("this : " + this);
 
         this.user1 = new User("1000", "youn", "pwisyoun");
         this.user2 = new User("1001", "intellij", "pwisj");
         this.user3 = new User("1002", "hotsix", "pwis6");
+
+        dao = new UserDao();
+        DataSource dataSource = new SingleConnectionDataSource(
+                "jdbc:mysql://localhost:3306/spring_study_dev", "root", "root", true
+                );
+        dao.setDataSource(dataSource);
     }
 
     @Test   // JUnit에 테스트용 메소드임을 알린다
