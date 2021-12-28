@@ -19,18 +19,32 @@ public class UserDao {
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection conn = dataSource.getConnection();
+        Connection conn = null;
+        PreparedStatement ps = null;
 
-        PreparedStatement ps = conn.prepareStatement(
-                "insert into users(id, name, password) values (?, ?, ?)");
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement("insert into users(id, name, password) values (?, ?, ?)");
+            ps.setString(1, user.getId());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getPassword());
 
-        ps.executeUpdate();
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if(ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {}
+            }
 
-        ps.close();
-        conn.close();
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
