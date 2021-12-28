@@ -34,30 +34,49 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection conn = dataSource.getConnection();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-        PreparedStatement ps = conn.prepareStatement(
-                "select * from users where id = ?");
-        ps.setString(1, id);
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement("select * from users where id = ?");
+            ps.setString(1, id);
+            rs = ps.executeQuery();
 
-        this.user = null;
-        ResultSet rs = ps.executeQuery();
-        if(rs.next()) {
-            this.user = new User();
-            this.user.setId(rs.getString("id"));
-            this.user.setName(rs.getString("name"));
-            this.user.setPassword(rs.getString("password"));
+            this.user = null;
+            if(rs.next()) {
+                this.user = new User();
+                this.user.setId(rs.getString("id"));
+                this.user.setName(rs.getString("name"));
+                this.user.setPassword(rs.getString("password"));
+            }
+
+            if(this.user == null) {
+                throw new EmptyResultDataAccessException(1);
+            }
+            return this.user;
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {}
+            }
+
+            if(ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {}
+            }
+
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
         }
-
-        rs.close();
-        ps.close();
-        conn.close();
-
-        if (user == null) {
-            throw new EmptyResultDataAccessException(1);
-        }
-
-        return this.user;
     }
 
     public void deleteAll() throws SQLException {
@@ -89,18 +108,37 @@ public class UserDao {
     }
 
     public int getCount() throws SQLException {
-        Connection conn = dataSource.getConnection();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-        PreparedStatement ps = conn.prepareStatement("select count(*) from users");
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement("select count(*) from users");
 
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {}
+            }
 
-        rs.close();
-        ps.close();
-        conn.close();
+            if(ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {}
+            }
 
-        return count;
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
     }
 }
