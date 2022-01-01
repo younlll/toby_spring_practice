@@ -36,7 +36,7 @@ public class UserDaoTest {
         this.user2 = new User("1001", "intellij", "pwisj");
         this.user3 = new User("1002", "hotsix", "pwis6");
 
-        dao = new UserDao();
+        dao = new UserDaoDeleteAll();
         DataSource dataSource = new SingleConnectionDataSource(
                 "jdbc:mysql://localhost:3306/spring_study_dev", "root", "root", true
                 );
