@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import springpractice2.tobyspring1.user.domain.User;
 
 import javax.sql.DataSource;
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -94,39 +95,14 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        try {
-            conn = dataSource.getConnection();
-
-            StatementStrategy strategy = new DeleteAllStatement();
-            ps = strategy.makePePreparedStatement(conn);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-
-                }
-            }
-            if(conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-
-                }
-            }
-        }
+        StatementStrategy strategy = new DeleteAllStatement();
+        jdbcContextWithStatementStrategy(strategy);
     }
 
     public int getCount() throws SQLException {
+        ResultSet rs = null;
         Connection conn = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
 
         try {
             conn = dataSource.getConnection();
@@ -151,6 +127,32 @@ public class UserDao {
             }
 
             if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+
+    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = dataSource.getConnection();
+            ps = stmt.makePePreparedStatement(conn);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw  e;
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {}
+            }
+
+            if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {}
